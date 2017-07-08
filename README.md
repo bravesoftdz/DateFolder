@@ -12,7 +12,7 @@ Organize photos and videos by recording date
 
 以我的iPhone 6s手机为例，将手机连接电脑，把DCIM目录复制到D盘根目录，这样就将手机中的全部图片和视频都保存到本地电脑了，如下图。
 
-![](Doc\PhoneDir.jpg)
+![](Doc/PhoneDir.jpg)
 
 将`Bin\DateFolder.exe`下载至本地电脑，运行之，参考下面图片填入相关信息，点击处理按钮即可。
 
@@ -24,11 +24,11 @@ Organize photos and videos by recording date
 
 `临时目录`是照片最终会去向何方。
 
-![](Doc\AppUI.jpg)
+![](Doc/AppUI.jpg)
 
 处理结束后，临时目录下的文件结构如下：
 
-![](Doc\FinalDir.jpg)
+![](Doc/FinalDir.jpg)
 
 下一步就是根据每个日期的照片内容，修改日期文件夹的名称，如改为`2017_07_08 无聊乱拍`。
 
