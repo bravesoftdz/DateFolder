@@ -4,6 +4,7 @@
 // Version:
 //  - 0.1   Publish on github
 //  - 0.1.1 Update About
+//  - 0.1.2 Update config
 
 unit frmDateFolder;
 
@@ -23,7 +24,7 @@ type
     btnButtons: TRzDialogButtons;
     lbledtCamera: TLabeledEdit;
     lbledtDateFormat: TLabeledEdit;
-    lbledtTempDir: TLabeledEdit;
+    lbledtDestDir: TLabeledEdit;
     chkMove: TCheckBox;
     pbProgress: TProgressBar;
     actlstMain: TActionList;
@@ -44,7 +45,7 @@ type
     m_AboutString: string;                                  // 关于
     m_PhotoDir: string;                                     // 照片目录
     m_VideoDir: string;                                     // 视频目录
-    m_TempDir: string;                                      // 临时目录
+    m_DestDir: string;                                      // 临时目录
     m_Camera: string;                                       // 照片类型
     m_SubDir: string;                                       // 新建子目录
     m_ImageExt: string;                                     // 图片扩展名
@@ -159,7 +160,7 @@ begin
   m_VideoDir := Trim(lbledtVideoDir.Text);
   m_ImageExt := Trim(lbledtImageExt.Text);
   m_VideoExt := Trim(lbledtVideoExt.Text);
-  m_TempDir := Trim(lbledtTempDir.Text);
+  m_DestDir := Trim(lbledtDestDir.Text);
   m_DateFormat := Trim(lbledtDateFormat.Text);
   m_IsMove := chkMove.Checked;
 
@@ -244,8 +245,8 @@ begin
   end;
 
   // 处理临时目录，如果没有就建立，如果后面没有“\”就加上
-  if not DirectoryExists(m_TempDir) then ForceDirectories(m_TempDir);
-  if RightStr(m_TempDir, 1) <> '\' then m_TempDir := m_TempDir + '\';
+  if not DirectoryExists(m_DestDir) then ForceDirectories(m_DestDir);
+  if RightStr(m_DestDir, 1) <> '\' then m_DestDir := m_DestDir + '\';
 
   // 根据文件个数，设置进度条的最大值
   pbProgress.Position := 0;
@@ -278,13 +279,13 @@ begin
     // 创建子目录
     if m_SubDirList.Count > 0 then
       for j := 0 to m_SubDirList.Count - 1 do
-        ForceDirectories(m_TempDir + DateDir + '\' + m_SubDirList.Strings[j]);
+        ForceDirectories(m_DestDir + DateDir + '\' + m_SubDirList.Strings[j]);
 
     // 将文件拷贝过去
     if m_VideoExtList.IndexOf(FileExt) >= 0 then
-      OutputDir := Format('%s%s\%s\', [m_TempDir, DateDir, m_VideoDir])
+      OutputDir := Format('%s%s\%s\', [m_DestDir, DateDir, m_VideoDir])
     else
-      OutputDir := Format('%s%s\%s\', [m_TempDir, DateDir, m_Camera]);
+      OutputDir := Format('%s%s\%s\', [m_DestDir, DateDir, m_Camera]);
 
     if not DirectoryExists(OutputDir) then ForceDirectories(OutputDir);
     if CopyFile(PChar(FileName), PChar(OutputDir + ExtractFileName(FileName)), False) then begin
@@ -330,7 +331,7 @@ begin
   lbledtVideoDir.EditLabel.Caption := '视频子目录';
   lbledtImageExt.EditLabel.Caption := '图片扩展名过滤';
   lbledtVideoExt.EditLabel.Caption := '视频扩展名过滤';
-  lbledtTempDir.EditLabel.Caption := '临时目录';
+  lbledtDestDir.EditLabel.Caption := '临时目录';
   lbledtDateFormat.EditLabel.Caption := '日期格式';
   lblStatus.Caption := '';
   pbProgress.Hide;
@@ -411,7 +412,7 @@ begin
     lbledtVideoDir.EditLabel.Caption := IniFile.ReadString('UI', 'VideoDir', '视频子目录');
     lbledtImageExt.EditLabel.Caption := IniFile.ReadString('UI', 'ImageExt', '图片扩展名过滤');
     lbledtVideoExt.EditLabel.Caption := IniFile.ReadString('UI', 'VideoExt', '视频扩展名过滤');
-    lbledtTempDir.EditLabel.Caption := IniFile.ReadString('UI', 'TempDir', '临时目录');
+    lbledtDestDir.EditLabel.Caption := IniFile.ReadString('UI', 'DestDir', '临时目录');
     lbledtDateFormat.EditLabel.Caption := IniFile.ReadString('UI', 'DateFormat', '日期格式');
     chkMove.Caption := IniFile.ReadString('UI', 'IsMove', '移动照片和视频');
     btnButtons.CaptionOk := IniFile.ReadString('UI', 'OK', '处理(&P)');
@@ -422,11 +423,11 @@ begin
 
     lbledtPhotoDir.Text := IniFile.ReadString('Config', 'PhotoDir', '');
     lbledtCamera.Text := IniFile.ReadString('Config', 'Camera', 'iPhone 6s');
-    lbledtSubDir.Text := IniFile.ReadString('Config', 'SubDir', 'Instagram');
+    lbledtSubDir.Text := IniFile.ReadString('Config', 'SubDir', '');
     lbledtVideoDir.Text := IniFile.ReadString('Config', 'VideoDir', 'Video');
     lbledtImageExt.Text := IniFile.ReadString('Config', 'ImageExt', 'jpg');
     lbledtVideoExt.Text := IniFile.ReadString('Config', 'VideoExt', 'mp4,mov');
-    lbledtTempDir.Text := IniFile.ReadString('Config', 'TempDir', '');
+    lbledtDestDir.Text := IniFile.ReadString('Config', 'DestDir', '');
     lbledtDateFormat.Text := IniFile.ReadString('Config', 'DateFormat', 'yyyy_mm_dd');
     chkMove.Checked := IniFile.ReadBool('Config', 'IsMove', True);
   finally
@@ -447,7 +448,7 @@ begin
     IniFile.WriteString('Config', 'SubDir', lbledtSubDir.Text);
     IniFile.WriteString('Config', 'ImageExt', lbledtImageExt.Text);
     IniFile.WriteString('Config', 'VideoExt', lbledtVideoExt.Text);
-    IniFile.WriteString('Config', 'TempDir', lbledtTempDir.Text);
+    IniFile.WriteString('Config', 'DestDir', lbledtDestDir.Text);
     IniFile.WriteString('Config', 'DateFormat', lbledtDateFormat.Text);
     IniFile.WriteBool('Config', 'IsMove', chkMove.Checked);
   finally

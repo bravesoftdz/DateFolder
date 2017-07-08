@@ -215,7 +215,7 @@ object DateFolderForm: TDateFolderForm
     LabelPosition = lpLeft
     TabOrder = 3
   end
-  object lbledtTempDir: TLabeledEdit
+  object lbledtDestDir: TLabeledEdit
     Left = 136
     Top = 218
     Width = 279
