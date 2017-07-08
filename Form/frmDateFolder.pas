@@ -1,3 +1,10 @@
+// DateFolder
+// Purpose: Organize photos and videos by recording date
+// Author:  etworker
+// Version:
+//  - 0.1   Publish on github
+//  - 0.1.1 Update About
+
 unit frmDateFolder;
 
 interface
@@ -8,7 +15,7 @@ uses
   DateUtils, IniFiles, CCR.Exif;
 
 const
-  VERSION: string = 'V0.1';
+  VERSION: string = 'V0.1.1';
 
 type
   TDateFolderForm = class(TForm)
@@ -411,7 +418,7 @@ begin
     btnButtons.CaptionHelp := IniFile.ReadString('UI', 'Quit', '退出(&X)');
     btnButtons.CaptionCancel := IniFile.ReadString('UI', 'About', '关于(&A)');
 
-    m_AboutString := IniFile.ReadString('Other', 'About', '本软件用来将目录内的照片按拍照日期放入相应的目录');
+    m_AboutString := IniFile.ReadString('Other', 'About', '本软件用来将目录内的照片按拍照日期放入相应的目录。作者:ET民工，项目主页:https://github.com/etworker/DateFolder');
 
     lbledtPhotoDir.Text := IniFile.ReadString('Config', 'PhotoDir', '');
     lbledtCamera.Text := IniFile.ReadString('Config', 'Camera', 'iPhone 6s');
