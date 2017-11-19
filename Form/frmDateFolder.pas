@@ -376,13 +376,17 @@ begin
       ExifData := TExifDataPatcher.Create(FileName);
     except
       on E: EInvalidJPEGHeader do begin
-        //Application.ShowException(E);
         SetStatus(Format('%s is not jpg file', [FileName]), True);
+        
+        // ExifData is already destroyed
+        ExifData := nil;
         Exit;
       end
     else
-      //raise;
       SetStatus(Format('%s read failed', [FileName]), True);
+
+      // ExifData is already destroyed
+      ExifData := nil;
       Exit;
     end;
 
@@ -392,7 +396,7 @@ begin
 
     Result := FileDate;
   finally
-    ExifData.Free;
+    if Assigned(ExifData) then ExifData.Free;
   end;
 end;
 
@@ -419,7 +423,8 @@ begin
     btnButtons.CaptionHelp := IniFile.ReadString('UI', 'Quit', '退出(&X)');
     btnButtons.CaptionCancel := IniFile.ReadString('UI', 'About', '关于(&A)');
 
-    m_AboutString := IniFile.ReadString('Other', 'About', '本软件用来将目录内的照片按拍照日期放入相应的目录。作者:ET民工，项目主页:https://github.com/etworker/DateFolder');
+    m_AboutString := IniFile.ReadString('Other', 'About',
+      '本软件用来将目录内的照片按拍照日期放入相应的目录。作者:ET民工，项目主页:https://github.com/etworker/DateFolder');
 
     lbledtPhotoDir.Text := IniFile.ReadString('Config', 'PhotoDir', '');
     lbledtCamera.Text := IniFile.ReadString('Config', 'Camera', 'iPhone 6s');
